@@ -93,7 +93,7 @@ export function montarCurriculoOtimizado(original: string, analise: Analise): Se
         break;
       case "titulo": {
         const objetivo = (buckets.get("titulo") ?? []).map((l) => l.trim()).filter(Boolean).join(" ");
-        conteudo = objetivo || (restoCabecalho.length ? restoCabecalho[0] : "");
+        conteudo = objetivo || restoCabecalho[0] || "";
         break;
       }
       case "resumo": {
