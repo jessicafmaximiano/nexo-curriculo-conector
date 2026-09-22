@@ -37,7 +37,7 @@ export async function extrairTextoDoArquivo(arquivo: File): Promise<string> {
     const linhas = new Map<number, string[]>();
     for (const item of conteudo.items as { str: string; transform: number[] }[]) {
       if (!item.str) continue;
-      const y = Math.round(item.transform[5]);
+      const y = Math.round(item.transform[5] ?? 0);
       if (!linhas.has(y)) linhas.set(y, []);
       linhas.get(y)!.push(item.str);
     }
