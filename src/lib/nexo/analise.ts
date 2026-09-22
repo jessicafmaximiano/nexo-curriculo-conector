@@ -137,6 +137,7 @@ function palavrasChaveVaga(descricao: string, vaga: VagaInfo): PalavraChave[] {
   const ordenadas = [...freq.entries()].sort((a, b) => b[1] - a[1]).slice(0, 25);
   for (const [p, ocorr] of ordenadas) {
     if (ocorr < 2 && candidatos.size > 12) continue;
+    if (GENERICAS.has(p) || SENIORIDADES.includes(p)) continue;
     adicionar(p, contem(obrigatorioNorm, p));
   }
 
