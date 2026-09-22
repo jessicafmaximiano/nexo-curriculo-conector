@@ -98,6 +98,16 @@ const COMPORTAMENTAIS = [
   "gestao de pessoas","negociacao","flexibilidade","empatia","atendimento ao cliente",
 ];
 
+/** Palavras genéricas de anúncio de vaga: não são competências e não devem virar recomendação. */
+const GENERICAS = new Set([
+  "vaga","vagas","empresa","candidato","candidata","requisito","requisitos","desejavel","obrigatorio","obrigatorios",
+  "responsabilidade","responsabilidades","atividade","atividades","experiencia","experiencias","conhecimento",
+  "conhecimentos","area","areas","trabalho","equipe","processo","processos","rotina","rotinas","apoiar","apoio",
+  "realizar","executar","atuar","analisar","organizar","acompanhar","garantir","participar","auxiliar","contribuir",
+  "beneficios","salario","horario","local","presencial","remoto","hibrido","oferecemos","buscamos","procuramos",
+  "perfil","profissional","funcao","cargo","setor","nivel","completo","cursando","anos","meses","dia","mes","ano",
+]);
+
 function dedupe(itens: string[]): string[] {
   const vistos = new Set<string>();
   return itens.filter((i) => {
@@ -137,6 +147,7 @@ function palavrasChaveVaga(descricao: string, vaga: VagaInfo): PalavraChave[] {
   const ordenadas = [...freq.entries()].sort((a, b) => b[1] - a[1]).slice(0, 25);
   for (const [p, ocorr] of ordenadas) {
     if (ocorr < 2 && candidatos.size > 12) continue;
+    if (GENERICAS.has(p) || SENIORIDADES.includes(p)) continue;
     adicionar(p, contem(obrigatorioNorm, p));
   }
 
