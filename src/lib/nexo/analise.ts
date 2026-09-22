@@ -98,6 +98,16 @@ const COMPORTAMENTAIS = [
   "gestao de pessoas","negociacao","flexibilidade","empatia","atendimento ao cliente",
 ];
 
+/** Palavras genéricas de anúncio de vaga: não são competências e não devem virar recomendação. */
+const GENERICAS = new Set([
+  "vaga","vagas","empresa","candidato","candidata","requisito","requisitos","desejavel","obrigatorio","obrigatorios",
+  "responsabilidade","responsabilidades","atividade","atividades","experiencia","experiencias","conhecimento",
+  "conhecimentos","area","areas","trabalho","equipe","processo","processos","rotina","rotinas","apoiar","apoio",
+  "realizar","executar","atuar","analisar","organizar","acompanhar","garantir","participar","auxiliar","contribuir",
+  "beneficios","salario","horario","local","presencial","remoto","hibrido","oferecemos","buscamos","procuramos",
+  "perfil","profissional","funcao","cargo","setor","nivel","completo","cursando","anos","meses","dia","mes","ano",
+]);
+
 function dedupe(itens: string[]): string[] {
   const vistos = new Set<string>();
   return itens.filter((i) => {
