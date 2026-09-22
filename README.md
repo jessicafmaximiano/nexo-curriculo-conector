@@ -1,8 +1,158 @@
-# Conexão Currículo
+# NexoCV — Gerador de Currículos ATS-Friendly
 
-# PRD — NexoCV: Gerador de Currículos ATS-Friendly
+> **Conecte seu currículo à vaga certa.**
 
-## 1. Visão geral
+O **NexoCV** é uma aplicação web criada no desafio **Criando um Gerador de Currículos ATS-Friendly com Lovable**, da DIO. A solução compara um currículo com a descrição de uma vaga, calcula a compatibilidade, identifica palavras-chave e produz uma versão mais clara e adequada à leitura por sistemas ATS.
+
+**Aplicação publicada:** [nexo-curriculo-conector.lovable.app](https://nexo-curriculo-conector.lovable.app)
+
+## Problema que a aplicação resolve
+
+Um currículo pode conter experiências relevantes e ainda ser descartado antes da leitura humana quando sua estrutura ou seu vocabulário dificultam a interpretação pelo ATS (*Applicant Tracking System*). O NexoCV ajuda o candidato a entender essa diferença e melhorar a apresentação das informações que realmente possui.
+
+A regra ética central é:
+
+> O NexoCV pode reorganizar e melhorar a redação, mas nunca deve inventar experiências, competências, formações, certificações, idiomas ou resultados.
+
+## Funcionalidades
+
+- Inserção do currículo por texto ou upload de PDF, DOCX e TXT;
+- leitura dos arquivos diretamente no navegador, com limite de 5 MB;
+- campo para a descrição da vaga e dados opcionais de cargo, empresa e link;
+- Match Score de 0 a 100, acompanhado de classificação;
+- palavras-chave encontradas e ausentes;
+- identificação de requisitos não localizados no currículo;
+- pontos fortes, problemas de estrutura e recomendações explicadas;
+- currículo otimizado em uma única coluna, sem elementos incompatíveis com ATS;
+- editor com comparação **Original x Otimizado** e restauração da versão;
+- exportação em PDF A4 com texto selecionável;
+- cópia do texto, download em `.txt` e impressão;
+- histórico local com abertura, duplicação, exclusão e limpeza dos dados;
+- interface responsiva, acessível e construída com componentes shadcn/ui.
+
+## Como a análise funciona
+
+1. O currículo e a vaga são normalizados e sanitizados.
+2. A aplicação identifica cargo, senioridade, responsabilidades, requisitos, tecnologias, competências comportamentais, formação, idiomas e certificações.
+3. Termos genéricos de anúncios são filtrados para não aparecerem como falsas competências.
+4. As palavras-chave são comparadas com o conteúdo real do currículo.
+5. O resultado é calculado com quatro componentes:
+
+| Componente | Peso | O que é avaliado |
+| --- | ---: | --- |
+| Competências e palavras-chave | 45% | Presença dos termos relevantes, prioridade dos obrigatórios e frequência na vaga |
+| Experiências e responsabilidades | 25% | Correspondência entre as atividades da vaga e as experiências descritas |
+| Formação, idiomas e certificações | 15% | Requisitos acadêmicos e complementares encontrados |
+| Estrutura e legibilidade ATS | 15% | Contatos, seções, listas, datas, verbos de ação e ausência de tabelas/colunas |
+
+6. A versão otimizada reorganiza apenas informações presentes no currículo original.
+7. O usuário revisa o texto e pode exportá-lo. O PDF é gerado em A4, uma coluna e com texto real selecionável.
+
+O score é uma estimativa orientativa e não representa garantia de aprovação em um processo seletivo.
+
+## Evidências de funcionamento
+
+### Match Score e palavras-chave
+
+Teste realizado com um currículo fictício de perfil administrativo comparado a uma vaga de Analista de Marketing Digital Pleno. O resultado de **26%** demonstra que a ferramenta não força uma compatibilidade inexistente.
+
+![Tela de análise com Match Score e palavras-chave](evidencias/analise-match-score.png)
+
+### Diagnóstico detalhado
+
+A análise apresenta pontos fortes, problemas estruturais, requisitos não identificados e seções que precisam de mais clareza.
+
+![Diagnóstico detalhado do currículo](evidencias/diagnostico-detalhado.png)
+
+### Currículo original e versão otimizada
+
+O editor permite comparar as duas versões antes da exportação. A versão ATS-friendly preservou o perfil administrativo original e não inventou experiência em marketing.
+
+![Comparação entre currículo original e otimizado](evidencias/comparacao-original-otimizado.png)
+
+### Histórico local
+
+As análises ficam armazenadas somente no navegador e podem ser reabertas, duplicadas ou excluídas.
+
+![Histórico de análises do NexoCV](evidencias/historico-analises.png)
+
+## Ajustes realizados depois da primeira geração
+
+A primeira versão definiu a identidade visual, a página inicial e o fluxo em quatro etapas. Durante o refinamento, foram realizados os seguintes ajustes:
+
+- correção de erros de tipagem e compilação que impediam a publicação;
+- validação do fluxo completo no navegador;
+- leitura real de arquivos PDF, DOCX e TXT no próprio dispositivo;
+- filtragem de palavras genéricas, como “apoiar”, “analisar” e “pleno”, que apareciam incorretamente como competências;
+- implementação da fórmula ponderada do Match Score;
+- criação do editor e da comparação Original x Otimizado;
+- exportação do PDF com texto selecionável, em vez de uma imagem;
+- inclusão do histórico no `localStorage` e da opção “Apagar meus dados”;
+- testes de upload, análise, geração do currículo, histórico e exportação.
+
+Esses refinamentos foram feitos para transformar a primeira interface em um MVP funcional e tornar o resultado mais transparente e seguro para o candidato.
+
+## Teste executado
+
+O cenário principal utilizou a candidata fictícia **Maria Eduarda Souza**, com experiência administrativa, e uma vaga de marketing digital. A baixa compatibilidade encontrada foi coerente com os dados fornecidos. Também foram conferidos:
+
+- extração de texto de PDF e DOCX;
+- classificação e composição do score;
+- recomendações sem criação de competências;
+- geração do currículo em coluna única;
+- PDF A4 com conteúdo selecionável;
+- persistência e gerenciamento do histórico.
+
+## Privacidade e segurança
+
+- O processamento dos documentos acontece no navegador.
+- Os dados das análises são gravados no `localStorage` do próprio dispositivo.
+- Não é necessário criar conta.
+- O usuário pode apagar todos os dados salvos.
+- Não há chave de API exposta ou serviço externo recebendo o currículo nesta versão.
+- Textos e arquivos passam por validação antes do processamento.
+
+## Tecnologias utilizadas
+
+- React 19;
+- TypeScript;
+- TanStack Start e TanStack Router;
+- Vite;
+- Tailwind CSS 4;
+- shadcn/ui e Radix UI;
+- jsPDF para exportação do PDF;
+- PDF.js para leitura de PDF;
+- Mammoth para leitura de DOCX;
+- `localStorage` para histórico e sessão;
+- Lovable para planejamento, geração, refinamento e publicação.
+
+## Executando localmente
+
+É necessário ter Node.js e npm instalados.
+
+```bash
+git clone https://github.com/jessicafmaximiano/nexo-curriculo-conector.git
+cd nexo-curriculo-conector
+npm install
+npm run dev
+```
+
+Para gerar a versão de produção:
+
+```bash
+npm run build
+```
+
+## Mega prompt
+
+O prompt foi estruturado como um PRD em Markdown e descreveu o produto, o fluxo, a regra ética, o cálculo do score, a exportação, a identidade visual e os critérios de aceitação.
+
+<details>
+<summary><strong>Abrir o mega prompt completo</strong></summary>
+
+### Prompt final utilizado no Lovable
+
+#### 1. Visão geral
 
 Crie uma aplicação web responsiva chamada **NexoCV**.
 
@@ -16,7 +166,7 @@ A aplicação deve ser funcional, profissional, acessível e simples de utilizar
 
 Toda a interface deve estar em português brasileiro.
 
-## 2. Problema
+#### 2. Problema
 
 Muitos candidatos possuem as competências necessárias para uma vaga, mas seus currículos são eliminados antes da análise humana porque:
 
@@ -32,7 +182,7 @@ Muitos candidatos possuem as competências necessárias para uma vaga, mas seus 
 
 O NexoCV deve ajudar o usuário a apresentar melhor suas experiências reais, sem inventar informações.
 
-## 3. Público-alvo
+#### 3. Público-alvo
 
 - Pessoas procurando emprego;
 
@@ -44,7 +194,7 @@ O NexoCV deve ajudar o usuário a apresentar melhor suas experiências reais, se
 
 - Profissionais que não sabem adaptar o currículo para cada vaga.
 
-## 4. Regra ética obrigatória
+#### 4. Regra ética obrigatória
 
 A aplicação nunca deve inventar:
 
@@ -72,7 +222,7 @@ Quando uma palavra-chave importante estiver ausente, mostre:
 
 > Esta competência aparece na vaga, mas não foi identificada no seu currículo. Adicione somente se você realmente possuir esse conhecimento.
 
-## 5. Fluxo principal
+#### 5. Fluxo principal
 
 O fluxo deve ser dividido em quatro etapas:
 
@@ -88,7 +238,7 @@ Exiba um indicador de progresso no topo:
 
 **Currículo → Vaga → Análise → Currículo otimizado**
 
-## 6. Tela inicial
+#### 6. Tela inicial
 
 Crie uma landing page objetiva contendo:
 
@@ -120,7 +270,7 @@ Texto secundário:
 
 > Compare competências, encontre palavras-chave importantes e gere uma versão mais clara e compatível com sistemas ATS.
 
-## 7. Entrada do currículo
+#### 7. Entrada do currículo
 
 Permita duas formas de inserir o currículo:
 
@@ -154,7 +304,7 @@ Exiba:
 
 Não envie documentos para serviços externos sem informar o usuário.
 
-## 8. Entrada da vaga
+#### 8. Entrada da vaga
 
 Crie um campo grande para colar a descrição completa da vaga.
 
@@ -190,7 +340,7 @@ O sistema deve tentar identificar automaticamente:
 
 - palavras-chave importantes.
 
-## 9. Análise de compatibilidade
+#### 9. Análise de compatibilidade
 
 Ao clicar em **“Analisar compatibilidade”**, apresente um estado de carregamento com mensagens como:
 
@@ -250,7 +400,7 @@ Apresente:
 
 Use cores acompanhadas de textos e ícones, nunca somente cores.
 
-## 10. Recomendações
+#### 10. Recomendações
 
 As recomendações devem ser específicas e acionáveis.
 
@@ -268,7 +418,7 @@ Exemplos:
 
 Não apresente recomendações genéricas sem explicar o motivo.
 
-## 11. Currículo ATS-friendly
+#### 11. Currículo ATS-friendly
 
 Crie uma versão otimizada utilizando somente informações presentes no currículo original.
 
@@ -318,7 +468,7 @@ O currículo deve:
 
 - ser compreensível mesmo sem elementos visuais.
 
-## 12. Editor
+#### 12. Editor
 
 Crie um editor para o usuário revisar o currículo antes da exportação.
 
@@ -338,7 +488,7 @@ Disponibilize:
 
 As alterações feitas pelo usuário devem ser preservadas durante a sessão.
 
-## 13. Exportação
+#### 13. Exportação
 
 Adicione um botão funcional:
 
@@ -376,7 +526,7 @@ Também permita:
 
 - baixar uma versão `.txt`.
 
-## 14. Histórico local
+#### 14. Histórico local
 
 Sem exigir cadastro, salve no navegador:
 
@@ -404,7 +554,7 @@ Crie uma página “Histórico” com opções para:
 
 Inclua um botão “Apagar meus dados” e explique que os dados ficam armazenados no navegador.
 
-## 15. Identidade visual
+#### 15. Identidade visual
 
 Use um design profissional, acolhedor e moderno.
 
@@ -434,7 +584,7 @@ Use componentes do **shadcn/ui**.
 
 Utilize tipografia limpa, espaçamento consistente, cantos moderadamente arredondados e sombras discretas.
 
-## 16. Acessibilidade e responsividade
+#### 16. Acessibilidade e responsividade
 
 A aplicação deve:
 
@@ -456,7 +606,7 @@ A aplicação deve:
 
 - respeitar redução de movimento.
 
-## 17. Estados da aplicação
+#### 17. Estados da aplicação
 
 Implemente:
 
@@ -478,7 +628,7 @@ Implemente:
 
 Não deixe botões sem funcionamento.
 
-## 18. Segurança e privacidade
+#### 18. Segurança e privacidade
 
 - Não exponha chaves de API no frontend;
 
@@ -494,7 +644,7 @@ Não deixe botões sem funcionamento.
 
 - Utilize armazenamento local nesta primeira versão.
 
-## 19. Critérios de aceitação
+#### 19. Critérios de aceitação
 
 O MVP somente estará concluído quando for possível:
 
@@ -522,7 +672,7 @@ O MVP somente estará concluído quando for possível:
 
 12. Utilizar a aplicação em celular e desktop.
 
-## 20. Prioridade de implementação
+#### 20. Prioridade de implementação
 
 Implemente primeiro o fluxo principal totalmente funcional:
 
@@ -532,25 +682,28 @@ Somente depois adicione histórico, animações e refinamentos visuais.
 
 Não crie apenas uma demonstração visual. Os botões, formulários, análise, editor, armazenamento e exportação devem funcionar de verdade.
 
-This project was built with [Lovable](https://lovable.dev).
+</details>
 
-**Live app**: https://nexo-curriculo-conector.lovable.app
+## Aprendizados
 
-## Build with Lovable
+Este projeto mostrou que o Vibe Coding não termina na primeira geração. Um prompt detalhado ajuda a estabelecer o escopo, mas a qualidade do produto depende da validação do fluxo, da observação dos resultados e de refinamentos específicos.
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/91d9c57a-09e2-4b4e-ac74-65890a7a458d).
+Também aprendi a transformar uma regra ética em comportamento verificável: em vez de preencher lacunas artificialmente, o NexoCV sinaliza o que não foi encontrado e orienta o usuário a adicionar uma informação somente quando ela for verdadeira. A etapa de testes foi essencial para corrigir termos genéricos, validar a leitura dos arquivos e confirmar que o PDF continuava legível por sistemas ATS.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+## Possíveis evoluções
 
-## Development
+- exportação também em `.docx`;
+- autenticação opcional e sincronização entre dispositivos;
+- banco de dados para histórico em nuvem;
+- dashboard de evolução do Match Score;
+- análises especializadas por área profissional;
+- melhorias de SEO e GEO;
+- testes automatizados de regressão.
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## Autoria
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
+Desenvolvido por **Jéssica Maximiano** durante o bootcamp da DIO, com apoio do Lovable no processo de Vibe Coding.
+
+- [Aplicação](https://nexo-curriculo-conector.lovable.app)
+- [Repositório](https://github.com/jessicafmaximiano/nexo-curriculo-conector)
+- [Perfil no GitHub](https://github.com/jessicafmaximiano)
