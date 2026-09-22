@@ -27,6 +27,7 @@ export async function extrairTextoDoArquivo(arquivo: File): Promise<string> {
   }
 
   const pdfjs = await import("pdfjs-dist");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const workerUrl = (await import("pdfjs-dist/build/pdf.worker.min.mjs?url")).default;
   pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
   const doc = await pdfjs.getDocument({ data: await arquivo.arrayBuffer() }).promise;
